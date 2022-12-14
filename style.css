@@ -35,6 +35,7 @@ header .container {
 button:hover {
   color: red;
   transform: scale(1.1);
+  cursor: pointer;
 }
 
 button {
@@ -69,4 +70,34 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+dialog {
+}
+
+dialog[open] {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  /* background-color: red; */
+}
+
+dialog button {
+  margin-top: 2rem;
+}
+
+dialog .material-symbols-outlined {
+  margin-left: auto;
+}
+
+dialog .material-symbols-outlined:hover {
+  margin-left: auto;
+  transform: scale(1.1);
+  cursor: pointer;
 }

@@ -40,17 +40,69 @@ function createBookCard(title, author, pages) {
 
 let booksContainer = document.querySelector(".books");
 
-booksContainer.append(
-  createBookCard(myLibrary[0].title, myLibrary[0].author, myLibrary[0].pages)
-);
-
 function displayBook() {}
 
 function Book() {
   // the constructor...
 }
 
-function addBookToLibrary() {
+function libraryBookToScreen(index) {
+  booksContainer.append(
+    createBookCard(
+      myLibrary[index].title,
+      myLibrary[index].author,
+      myLibrary[index].pages
+    )
+  );
+}
+
+function addBookToLibrary(index) {
   // do stuff here
 }
+
 console.log("test");
+
+// modal
+
+// let addBookBTN = document.querySelector("#addBook");
+// let dialog = document.querySelector("dialog");
+// let bookForm = document.querySelector("#bookForm");
+// let submitBTN = document.querySelector("#formSubmit");
+// let bookFormCloseBTN = document.querySelector(
+//   "dialog .material-symbols-outlined"
+// );
+
+// addBookBTN.addEventListener("click", () => dialog.showModal());
+
+// bookFormCloseBTN.addEventListener("click", () => {
+//   dialog.close();
+// });
+
+// submitBTN.addEventListener("click", (e) => {
+//   // bookForm;
+//   console.log(e);
+//   console.log(bookForm);
+// });
+
+// dialog.addEventListener("close", () => {
+//   console.log(dialog.returnValue);
+// });
+
+const showButton = document.getElementById("showDialog");
+const favDialog = document.getElementById("favDialog");
+const outputBox = document.querySelector("output");
+const selectEl = favDialog.querySelector("select");
+const confirmBtn = favDialog.querySelector("#confirmBtn");
+
+// "Update details" button opens the <dialog> modally
+showButton.addEventListener("click", () => {
+  favDialog.showModal();
+});
+// "Favorite animal" input sets the value of the submit button
+selectEl.addEventListener("change", (e) => {
+  confirmBtn.value = selectEl.value;
+});
+// "Confirm" button of form triggers "close" on dialog because of [method="dialog"]
+favDialog.addEventListener("close", () => {
+  console.log(favDialog.returnValue);
+});
