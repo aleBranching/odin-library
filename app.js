@@ -1,26 +1,52 @@
 // "The Hobbit by J.R.R. Tolkien, 295 pages, not read yet"
+function bookFunction() {}
+
+bookFunction.prototype.changeRead = function () {
+  this.read = !this.read;
+};
+
+function Book(title, author, pages, read) {
+  // the constructor...
+  this.title = title;
+  this.author = author;
+  this.pages = pages;
+  this.read = read;
+}
+
+Book.prototype = Object.create(bookFunction.prototype);
 
 let myLibrary = [
-  { title: "The Hobbit", author: "J.R.R. Tolkien", pages: 295, read: false },
-  {
-    title: "The Second Hobbit",
-    author: "J.R.R. Tolkien",
-    pages: 295,
-    read: false,
-  },
-  {
-    title: "third",
-    author: "J.R.R. Tolkien",
-    pages: 295,
-    read: true,
-  },
-  {
-    title: "fourth",
-    author: "J.R.R. Tolkien",
-    pages: 295,
-    read: false,
-  },
+  new Book("The Hobbit", "JRR tolkien", 6969, true),
+  new Book("The Second Hobbit", "J.R.R. Tolkien", 295, false),
+  new Book("third", "J.R.R. Tolkien", 295, true),
+  new Book("fourth", "J.R.R. Tolkien", 295, false),
 ];
+
+function libraryBookToScreen(index) {
+  booksContainer.append(
+    createBookCard(
+      myLibrary[index].title,
+      myLibrary[index].author,
+      myLibrary[index].pages,
+      myLibrary[index].read,
+      index
+    )
+  );
+}
+
+function addBookToLibrary(bookOBJ) {
+  myLibrary.push(bookOBJ);
+  // do stuff here
+}
+
+// let book1 = new Book();
+// book1.author = "aaaa";
+// book1.title = "alfna";
+// book1.pages = 21;
+// book1.read = false;
+
+// addBookToLibrary(new Book("The Hobbit", "JRR tolkien", 6969, true));
+
 function createBookCard(title, author, pages, read, index) {
   let bookCard = document.createElement("div");
   bookCard.setAttribute(`data-index`, index);
@@ -70,33 +96,6 @@ function displayBook(library) {
   });
 }
 
-function Book(title, author, pages, read) {
-  // the constructor...
-  (this.title = title),
-    (this.author = author),
-    (this.pages = pages),
-    (this.read = read);
-}
-
-function libraryBookToScreen(index) {
-  booksContainer.append(
-    createBookCard(
-      myLibrary[index].title,
-      myLibrary[index].author,
-      myLibrary[index].pages,
-      myLibrary[index].read,
-      index
-    )
-  );
-}
-
-function addBookToLibrary(bookOBJ) {
-  myLibrary.push(bookOBJ);
-  // do stuff here
-}
-
-console.log("test");
-
 // modal
 
 let addBookBTN = document.querySelector("#addBook");
@@ -125,14 +124,11 @@ submitBTN.addEventListener("click", (e) => {
   let result = new Book();
   let valid = true;
   formInputs.forEach((anInput) => {
-    // console.log(anInput.checkValidity);
     if (anInput.checkValidity() === false) {
-      console.log("invalid");
       valid = false;
     }
-    console.log(anInput.type);
+
     if (anInput.type !== "checkbox" && anInput.checkValidity() === true) {
-      console.log(anInput.value);
       let key = anInput.name;
       let value = anInput.value;
 
@@ -148,14 +144,10 @@ submitBTN.addEventListener("click", (e) => {
   if (valid) {
     addBookToLibrary(result);
     libraryBookToScreen(myLibrary.length - 1);
-    console.log(result);
+
     bookForm.reset();
     dialog.close();
   }
-});
-
-dialog.addEventListener("close", () => {
-  console.log(dialog.returnValue);
 });
 
 // functions of bookCards
@@ -163,7 +155,7 @@ dialog.addEventListener("close", () => {
 function deleteBookBTNEvent(aButton) {
   aButton.addEventListener("click", () => {
     let index = aButton.dataset.index;
-    console.log(index);
+
     document.querySelector(`.bookCard[data-index="${index}"]`).remove();
     myLibrary.splice(index, 1);
   });
@@ -172,7 +164,8 @@ function deleteBookBTNEvent(aButton) {
 function readBookBTNEvent(aButton) {
   aButton.addEventListener("click", () => {
     let index = aButton.dataset.index;
-    myLibrary[index].read = !myLibrary[index].read;
+
+    myLibrary[index].changeRead();
     aButton.textContent = myLibrary[index].read ? "Have Read" : "Not read";
   });
 }
