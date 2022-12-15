@@ -2,10 +2,28 @@
 
 let myLibrary = [
   { title: "The Hobbit", author: "J.R.R. Tolkien", pages: 295, read: false },
+  {
+    title: "The Second Hobbit",
+    author: "J.R.R. Tolkien",
+    pages: 295,
+    read: false,
+  },
+  {
+    title: "third",
+    author: "J.R.R. Tolkien",
+    pages: 295,
+    read: true,
+  },
+  {
+    title: "fourth",
+    author: "J.R.R. Tolkien",
+    pages: 295,
+    read: false,
+  },
 ];
-
-function createBookCard(title, author, pages) {
+function createBookCard(title, author, pages, read, index) {
   let bookCard = document.createElement("div");
+  bookCard.setAttribute(`data-index`, index);
   bookCard.classList = "bookCard";
   let bookInfo = document.createElement("div");
   bookInfo.classList = "bookInfo";
@@ -27,12 +45,17 @@ function createBookCard(title, author, pages) {
   let buttons = document.createElement("div");
   buttons.classList = "buttons";
   let aButton = document.createElement("button");
-  aButton.textContent = "Not read";
+  aButton.textContent = read ? "Have Read" : "Not read";
   aButton.id = "readStatus";
+  aButton.setAttribute(`data-index`, index);
+
   bButton = document.createElement("button");
   bButton.textContent = "Delete";
   bButton.id = "deleteBook";
+  bButton.setAttribute(`data-index`, index);
   buttons.append(aButton, bButton);
+  deleteBookBTNEvent(bButton);
+  readBookBTNEvent(aButton);
 
   bookCard.append(buttons);
   return bookCard;
@@ -40,10 +63,19 @@ function createBookCard(title, author, pages) {
 
 let booksContainer = document.querySelector(".books");
 
-function displayBook() {}
+displayBook(myLibrary);
+function displayBook(library) {
+  library.forEach((aBook, index) => {
+    libraryBookToScreen(index);
+  });
+}
 
-function Book() {
+function Book(title, author, pages, read) {
   // the constructor...
+  (this.title = title),
+    (this.author = author),
+    (this.pages = pages),
+    (this.read = read);
 }
 
 function libraryBookToScreen(index) {
@@ -51,12 +83,15 @@ function libraryBookToScreen(index) {
     createBookCard(
       myLibrary[index].title,
       myLibrary[index].author,
-      myLibrary[index].pages
+      myLibrary[index].pages,
+      myLibrary[index].read,
+      index
     )
   );
 }
 
-function addBookToLibrary(index) {
+function addBookToLibrary(bookOBJ) {
+  myLibrary.push(bookOBJ);
   // do stuff here
 }
 
@@ -64,45 +99,80 @@ console.log("test");
 
 // modal
 
-// let addBookBTN = document.querySelector("#addBook");
-// let dialog = document.querySelector("dialog");
-// let bookForm = document.querySelector("#bookForm");
-// let submitBTN = document.querySelector("#formSubmit");
-// let bookFormCloseBTN = document.querySelector(
-//   "dialog .material-symbols-outlined"
-// );
+let addBookBTN = document.querySelector("#addBook");
+let dialog = document.querySelector("dialog");
+let bookForm = document.querySelector("#bookForm");
+let submitBTN = document.querySelector("#formSubmit");
+let bookFormCloseBTN = document.querySelector(
+  "dialog .material-symbols-outlined"
+);
 
-// addBookBTN.addEventListener("click", () => dialog.showModal());
+// Inputs
+let bookTitleINPT = document.querySelector("input#bookTitle");
+let authorINPT = document.querySelector("input#author");
+let pagesINPT = document.querySelector("input#pages");
+let readINPT = document.querySelector("input#read");
 
-// bookFormCloseBTN.addEventListener("click", () => {
-//   dialog.close();
-// });
+let formInputs = [bookTitleINPT, authorINPT, pagesINPT, readINPT];
 
-// submitBTN.addEventListener("click", (e) => {
-//   // bookForm;
-//   console.log(e);
-//   console.log(bookForm);
-// });
+addBookBTN.addEventListener("click", () => dialog.showModal());
 
-// dialog.addEventListener("close", () => {
-//   console.log(dialog.returnValue);
-// });
-
-const showButton = document.getElementById("showDialog");
-const favDialog = document.getElementById("favDialog");
-const outputBox = document.querySelector("output");
-const selectEl = favDialog.querySelector("select");
-const confirmBtn = favDialog.querySelector("#confirmBtn");
-
-// "Update details" button opens the <dialog> modally
-showButton.addEventListener("click", () => {
-  favDialog.showModal();
+bookFormCloseBTN.addEventListener("click", () => {
+  dialog.close();
 });
-// "Favorite animal" input sets the value of the submit button
-selectEl.addEventListener("change", (e) => {
-  confirmBtn.value = selectEl.value;
+
+submitBTN.addEventListener("click", (e) => {
+  let result = new Book();
+  let valid = true;
+  formInputs.forEach((anInput) => {
+    // console.log(anInput.checkValidity);
+    if (anInput.checkValidity() === false) {
+      console.log("invalid");
+      valid = false;
+    }
+    console.log(anInput.type);
+    if (anInput.type !== "checkbox" && anInput.checkValidity() === true) {
+      console.log(anInput.value);
+      let key = anInput.name;
+      let value = anInput.value;
+
+      result[`${key}`] = value;
+    } else if (anInput.type == "checkbox") {
+      let key = anInput.name;
+      let value = anInput.checked;
+
+      result[`${key}`] = value;
+      // result.push(anInput.checked);
+    }
+  });
+  if (valid) {
+    addBookToLibrary(result);
+    libraryBookToScreen(myLibrary.length - 1);
+    console.log(result);
+    bookForm.reset();
+    dialog.close();
+  }
 });
-// "Confirm" button of form triggers "close" on dialog because of [method="dialog"]
-favDialog.addEventListener("close", () => {
-  console.log(favDialog.returnValue);
+
+dialog.addEventListener("close", () => {
+  console.log(dialog.returnValue);
 });
+
+// functions of bookCards
+
+function deleteBookBTNEvent(aButton) {
+  aButton.addEventListener("click", () => {
+    let index = aButton.dataset.index;
+    console.log(index);
+    document.querySelector(`.bookCard[data-index="${index}"]`).remove();
+    myLibrary.splice(index, 1);
+  });
+}
+
+function readBookBTNEvent(aButton) {
+  aButton.addEventListener("click", () => {
+    let index = aButton.dataset.index;
+    myLibrary[index].read = !myLibrary[index].read;
+    aButton.textContent = myLibrary[index].read ? "Have Read" : "Not read";
+  });
+}

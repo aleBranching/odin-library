@@ -27,10 +27,10 @@
         <button>Login</button>
       </div>
     </header>
-    <!-- <dialog>
+    <dialog>
       <span class="material-symbols-outlined"> close </span>
       <p>Add a new book!</p>
-      <form method="dialog" id="bookForm">
+      <form id="bookForm">
         <label for="bookTitle">Book Title:</label>
         <input id="bookTitle" name="title" type="text" required />
         <label for="author">Author:</label>
@@ -38,7 +38,7 @@
         <label for="pages">Pages:</label>
         <input id="pages" type="number" name="pages" min="0" required />
         <label for="">Already Read?:</label>
-        <input id="read" name="read" type="checkbox" />
+        <input id="read" name="read" type="checkbox" value="notRead" />
         <button
           id="formSubmit"
           type="submit"
@@ -48,59 +48,11 @@
           Submit
         </button>
       </form>
-    </dialog> -->
-
-    <dialog id="favDialog">
-      <form method="dialog">
-        <p>
-          <label
-            >Favorite animal:
-            <select>
-              <option value="default">Choose…</option>
-              <option>Brine shrimp</option>
-              <option>Red panda</option>
-              <option>Spider monkey</option>
-            </select>
-          </label>
-        </p>
-        <div>
-          <button value="cancel">Cancel</button>
-          <button id="confirmBtn" value="default">Confirm</button>
-        </div>
-      </form>
     </dialog>
-    <p>
-      <button id="showDialog">Show the dialog</button>
-    </p>
-    <output></output>
 
     <div class="main">
       <button id="addBook">Add Book</button>
-      <div class="books">
-        <div class="bookCard">
-          <div class="bookInfo" data-index="0">
-            <p id="title">adventure</p>
-            <p id="author">teo</p>
-            <p id="pages">123</p>
-          </div>
-          <div class="buttons">
-            <button>Not read</button>
-            <button>Delete</button>
-          </div>
-        </div>
-
-        <div class="bookCard">
-          <div class="bookInfo" data-index="0">
-            <p id="title">adventure</p>
-            <p id="author">teo</p>
-            <p id="pages">123</p>
-          </div>
-          <div class="buttons">
-            <button>Not read</button>
-            <button>Delete</button>
-          </div>
-        </div>
-      </div>
+      <div class="books"></div>
     </div>
     <div class="footer">Made by aleTesting</div>
   </body>
